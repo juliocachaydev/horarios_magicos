@@ -11,37 +11,81 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as HomeImport } from './routes/home'
+import { Route as OrganizationsOrganizationIdImport } from './routes/organizations/$organizationId'
 
 // Create/Update Routes
+
+const HomeRoute = HomeImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OrganizationsOrganizationIdRoute =
+  OrganizationsOrganizationIdImport.update({
+    id: '/organizations/$organizationId',
+    path: '/organizations/$organizationId',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+  interface FileRoutesByPath {
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeImport
+      parentRoute: typeof rootRoute
+    }
+    '/organizations/$organizationId': {
+      id: '/organizations/$organizationId'
+      path: '/organizations/$organizationId'
+      fullPath: '/organizations/$organizationId'
+      preLoaderRoute: typeof OrganizationsOrganizationIdImport
+      parentRoute: typeof rootRoute
+    }
+  }
 }
 
 // Create and export the route tree
 
-export interface FileRoutesByFullPath {}
+export interface FileRoutesByFullPath {
+  '/home': typeof HomeRoute
+  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
+}
 
-export interface FileRoutesByTo {}
+export interface FileRoutesByTo {
+  '/home': typeof HomeRoute
+  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
+}
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/home': typeof HomeRoute
+  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths: '/home' | '/organizations/$organizationId'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to: '/home' | '/organizations/$organizationId'
+  id: '__root__' | '/home' | '/organizations/$organizationId'
   fileRoutesById: FileRoutesById
 }
 
-export interface RootRouteChildren {}
+export interface RootRouteChildren {
+  HomeRoute: typeof HomeRoute
+  OrganizationsOrganizationIdRoute: typeof OrganizationsOrganizationIdRoute
+}
 
-const rootRouteChildren: RootRouteChildren = {}
+const rootRouteChildren: RootRouteChildren = {
+  HomeRoute: HomeRoute,
+  OrganizationsOrganizationIdRoute: OrganizationsOrganizationIdRoute,
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
@@ -52,7 +96,16 @@ export const routeTree = rootRoute
   "routes": {
     "__root__": {
       "filePath": "__root.tsx",
-      "children": []
+      "children": [
+        "/home",
+        "/organizations/$organizationId"
+      ]
+    },
+    "/home": {
+      "filePath": "home.tsx"
+    },
+    "/organizations/$organizationId": {
+      "filePath": "organizations/$organizationId.tsx"
     }
   }
 }
