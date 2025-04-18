@@ -2,7 +2,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -19,6 +18,9 @@ import { Badge } from "@/components/ui/badge";
 import { Menu, User } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import {useEffect, useState, useRef} from "react";
+import {Textarea} from "@/components/ui/textarea.tsx";
+import { Input } from "@/components/ui/input"
 
 export type ProjectCardProps = {
     projectId: string;
@@ -31,6 +33,20 @@ export type ProjectCardProps = {
 }
 
 const ProjectCard = (props: ProjectCardProps) => {
+    const [editMode, setEditMode] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (ref.current && !ref.current.contains(event.target as Node)) {
+                setEditMode(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+    }, [ref]);
 
     const progressValue = (() =>{
         if (props.progress < 5)
@@ -43,11 +59,34 @@ const ProjectCard = (props: ProjectCardProps) => {
         }
         return props.progress;
     })();
+
+    const enterEditMode = () => {
+        setEditMode(true);
+    }
+
+    if (!editMode)
+    {
+        return (
+            <Card className='w-[350px]'>
+                <CardHeader>
+                    <CardTitle className='flex justify-between items-center-safe'>
+                        {props.name}
+                        <ProjectMenu OnUpdate={() => {}} OnArchive={() => {}} OnDelete={() => {}}/></CardTitle>
+                    <CardDescription onClick={enterEditMode}>{props.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <UserTag name={props.owner}/>
+                    <Progress value={progressValue}></Progress>
+                </CardContent>
+            </Card>
+        )
+    }
     return (
-        <Card className='w-[350px]'>
+        <Card ref={ref} className='w-[350px]'>
             <CardHeader>
-                <CardTitle className='flex justify-between items-center-safe'>{props.name}<ProjectMenu OnUpdate={() => {}} OnArchive={() => {}} OnDelete={() => {}}/></CardTitle>
-                <CardDescription>{props.description}</CardDescription>
+                <CardTitle className='flex justify-between items-center-safe'>
+                    <Input value={props.name}/><ProjectMenu disabled OnUpdate={() => {}} OnArchive={() => {}} OnDelete={() => {}}/></CardTitle>
+                <Textarea placeholder='descripcion...'>{props.description}</Textarea>
             </CardHeader>
             <CardContent>
                 <UserTag name={props.owner}/>
@@ -67,6 +106,7 @@ const UserTag = (props: {name: string}) => {
 }
 
 type ProjectMenuProps = {
+    disabled: boolean;
     OnUpdate: () => void;
     OnArchive: () => void;
     OnDelete: () => void;
@@ -76,7 +116,7 @@ const ProjectMenu = (props: ProjectMenuProps) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" disabled={props.disabled}>
                     <Menu />
                 </Button>
             </DropdownMenuTrigger>
