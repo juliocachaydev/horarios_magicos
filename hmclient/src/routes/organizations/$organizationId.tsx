@@ -11,7 +11,7 @@ export const Route = createFileRoute('/organizations/$organizationId')({
 async function loader({ params }: { params: { organizationId: string } })
 : Promise<OrganizationViewModel> {
   const { organizationId } = params;
-  const result = await upfetch<OrganizationViewModel>(`/api/organizations/${organizationId}`, {
+  const result = await upfetch(`/api/organizations/${organizationId}`, {
       schema: OrganizationViewModelSchema
     });
   return result;
