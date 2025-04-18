@@ -31,6 +31,7 @@ export type ProjectCardProps = {
 }
 
 const ProjectCard = (props: ProjectCardProps) => {
+
     const progressValue = (() =>{
         if (props.progress < 5)
         {
