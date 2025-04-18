@@ -8,6 +8,7 @@ export const OrganizationViewModelSchema =
             z.object({
                 id: z.string(),
                 name: z.string(),
+                description: z.string(),
                 owner: z.string(),
                 progressPercentage: z.number()
             })

@@ -12,6 +12,8 @@ public class OrganizationViewModel
 
         public required string Name { get; init; }
 
+        public required string Description { get; init; }
+
         public required string Owner { get; init; }
 
         public required decimal ProgressPercentage { get; init; }

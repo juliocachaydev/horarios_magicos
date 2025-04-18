@@ -18,6 +18,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 1",
+                        Description = "Alternativa 2, solo si falta profesor de matematicas",
                         Owner = "Owner 1",
                         ProgressPercentage = 45m
                     },
@@ -25,6 +26,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 2",
+                        Description = "Proyecto para practicar y entrenamiento. No usar.",
                         Owner = "Owner 2",
                         ProgressPercentage = 75m
                     },
@@ -32,6 +34,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 3",
+                        Description = "No pude resolver el cruce de matematicas en II A y III A, hable con Maria y decidimos contratar a un nuevo profesor.",
                         Owner = "Owner 3",
                         ProgressPercentage = 6m
                     },
@@ -39,6 +42,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 4",
+                        Description = "",
                         Owner = "Owner 4",
                         ProgressPercentage = 8m
                     },
@@ -46,6 +50,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 5",
+                        Description = "",
                         Owner = "Owner 5",
                         ProgressPercentage = 90m
                     },
@@ -53,6 +58,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 6",
+                        Description = "",
                         Owner = "Owner 6",
                         ProgressPercentage = 100m
                     },
@@ -60,6 +66,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 7",
+                        Description = "",
                         Owner = "Owner 7",
                         ProgressPercentage = 80m
                     },
@@ -67,6 +74,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 8",
+                        Description = "Canchita esta de licencia asi que creamos este horarios solo para mover las clases de 2do A y 3ero A",
                         Owner = "Owner 8",
                         ProgressPercentage = 70m
                     },
@@ -74,6 +82,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 9",
+                        Description = "No pude resolver el cruce de matematicas en II A y III A, hable con Maria y decidimos contratar a un nuevo profesor.",
                         Owner = "Owner 9",
                         ProgressPercentage = 3m
                     },
@@ -81,6 +90,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 10",
+                        Description = "No pude resolver el cruce de Geo.",
                         Owner = "Owner 10",
                         ProgressPercentage = 85m
                     },
@@ -88,6 +98,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 11",
+                        Description = "",
                         Owner = "Owner 11",
                         ProgressPercentage = 65m
                     },
@@ -95,6 +106,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 12",
+                        Description = "Borrador de Julio. No usar.",
                         Owner = "Owner 12",
                         ProgressPercentage = 55m
                     },
@@ -102,6 +114,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 13",
+                        Description = "",
                         Owner = "Owner 13",
                         ProgressPercentage = 95m
                     },
@@ -109,6 +122,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 14",
+                        Description = "",
                         Owner = "Owner 14",
                         ProgressPercentage = 1m
                     },
@@ -116,6 +130,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 15",
+                        Description = "",
                         Owner = "Owner 15",
                         ProgressPercentage = 25m
                     },
@@ -123,6 +138,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 16",
+                        Description = "",
                         Owner = "Owner 16",
                         ProgressPercentage = 35m
                     },
@@ -130,6 +146,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 17",
+                        Description = "",
                         Owner = "Owner 17",
                         ProgressPercentage = 45m
                     },
@@ -137,6 +154,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 18",
+                        Description = "",
                         Owner = "Owner 18",
                         ProgressPercentage = 5m
                     },
@@ -144,6 +162,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 19",
+                        Description = "",
                         Owner = "Owner 19",
                         ProgressPercentage = 6m
                     },
@@ -151,6 +170,7 @@ public class OrganizationsGet : IRequest<OrganizationViewModel>{
                     {
                         Id = Guid.NewGuid(),
                         Name = "Project 20",
+                        Description = "",
                         Owner = "Owner 20",
                         ProgressPercentage = 7m
                     }
