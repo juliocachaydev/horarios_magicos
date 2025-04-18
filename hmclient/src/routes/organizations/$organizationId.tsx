@@ -1,27 +1,19 @@
 import {createFileRoute} from '@tanstack/react-router'
 import OrganizationPage from "@/pages/organizations/OrganizationPage.tsx";
 import {upfetch} from "@/common/upfetch.ts";
-import {z} from 'zod';
+import {OrganizationViewModel, OrganizationViewModelSchema} from "@/pages/organizations/OrganizationViewModel.ts";
 
 export const Route = createFileRoute('/organizations/$organizationId')({
   component: OrganizationPage,
   loader: loader
 })
 
-async function loader({ params }: { params: { organizationId: string } }) {
+async function loader({ params }: { params: { organizationId: string } })
+: Promise<OrganizationViewModel> {
   const { organizationId } = params;
-  return await upfetch(`/api/organizations/${organizationId}`, {
-    schema: z.object({
-      id: z.string(),
-      projects: z.array(
-          z.object({
-            id: z.string(),
-            name: z.string(),
-            owner: z.string(),
-            progress: z.number()
-          })
-      )
-    })
-  });
+  const result = await upfetch<OrganizationViewModel>(`/api/organizations/${organizationId}`, {
+      schema: OrganizationViewModelSchema
+    });
+  return result;
 }
 

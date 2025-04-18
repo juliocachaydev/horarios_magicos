@@ -1,5 +1,8 @@
+import {Route} from '../../routes/organizations/$organizationId';
 
 export default function OrganizationPage()
 {
-    return (<h1>Organization</h1>)
+    const model = Route.useLoaderData();
+
+    return (<h1>Organization {model.organizationId}</h1>)
 }
