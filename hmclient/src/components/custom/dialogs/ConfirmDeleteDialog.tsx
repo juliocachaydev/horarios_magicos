@@ -29,6 +29,8 @@ export default function ConfirmDeleteDialog(
     const confirmDisabled = (props.confirmKeyword != undefined &&
         props.confirmKeyword !== confirmKeywordValue) ?? false;
 
+
+
     return (
         <AlertDialog open={props.open}>
             <AlertDialogContent>
