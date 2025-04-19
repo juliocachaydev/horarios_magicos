@@ -21,14 +21,17 @@ import {Separator} from "@/components/ui/separator.tsx";
 export type ProjectCardReadProps = {
     model: ProjectModel;
     onOpen: (projectId: string) => Promise<void>;
+    onDelete: (projectId: string) => Promise<void>;
     onEnterEditMode: () => void;
 }
 
 export type ProjectCardFormProps = {
     model: ProjectModel;
     forbiddenNames: string[];
-    onUpdate: (model: ProjectModel) => void;
+    onUpdate: (model: ProjectModel) => Promise<void>;
     exitEditMode: () => void;
+    onDelete: (projectId: string) => Promise<void>;
+    createMode?: boolean;
 }
 
 export const ProjectCardRead = (props: ProjectCardReadProps) => {
@@ -37,7 +40,9 @@ export const ProjectCardRead = (props: ProjectCardReadProps) => {
             <CardHeader>
                 <CardTitle onClick={props.onEnterEditMode} className='flex justify-between items-center-safe'>
                     {props.model.name}
-                    <ProjectMenu disabled={false} OnUpdate={() => {}} OnArchive={() => {}} OnDelete={() => {}}/></CardTitle>
+                    <ProjectMenu disabled={false} OnArchive={() => {}} OnDelete={() => {
+                        props.onDelete(props.model.id)
+                    }}/></CardTitle>
                 <CardDescription onClick={props.onEnterEditMode}>{props.model.description}</CardDescription>
                 <Separator/>
             </CardHeader>
@@ -52,9 +57,8 @@ export const ProjectCardRead = (props: ProjectCardReadProps) => {
 export const ProjectCardForm = (props: ProjectCardFormProps) =>{
     const form = useForm({
         defaultValues: props.model,
-        onSubmit: ({value}) => {
-            alert(value);
-            props.onUpdate(value)
+        onSubmit: async ({value}) => {
+            await props.onUpdate(value)
             props.exitEditMode();
         }
     });
@@ -84,13 +88,16 @@ export const ProjectCardForm = (props: ProjectCardFormProps) =>{
         return undefined;
     }
 
+    const isUpdateMode = props.createMode === undefined || props!.createMode === false;
+
+    const cardClassName = isUpdateMode ? 'w-[350px]' : 'w-[350px] border-0 shadow-none';
 
     return (
         <form onSubmit={async (e)=>{
             e.preventDefault();
             await form.handleSubmit();
         }}>
-            <Card ref={ref} className='w-[350px]'>
+            <Card ref={ref} className={cardClassName}>
                 <CardHeader>
                     <CardTitle className='flex justify-between items-center-safe'>
                         <form.Field name='name'
@@ -106,24 +113,29 @@ export const ProjectCardForm = (props: ProjectCardFormProps) =>{
                                         </HmFormField>
                                     )}/>
 
-                        <ProjectMenu disabled OnUpdate={() => {}} OnArchive={() => {}} OnDelete={() => {}}/></CardTitle>
+                        {isUpdateMode && <ProjectMenu disabled OnArchive={() => {}} OnDelete={
+                            ()=> props.onDelete(props.model.id)
+                        }/>}</CardTitle>
                     <form.Field name='description'
                     children={(field)=>(
                         <Textarea placeholder='descripcion...'
+                                  className='mt-3'
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e)=>field.handleChange(e.target.value)}/>
                     )}/>
-                    <HmButtonSolid variant='default' text='Guardar'
-                    disabled={!form.state.isFormValid}
-                    type='submit'/>
-                    <HmButtonSolid variant='secondary' text='Cancelar' onClick={props.exitEditMode}/>
-                    <Separator/>
+                    <div className='flex gap-2 mt-3'>
+                        <HmButtonSolid variant='default' text='Guardar'
+                                       disabled={!form.state.isFormValid}
+                                       type='submit'/>
+                        <HmButtonSolid variant='secondary' text='Cancelar' onClick={props.exitEditMode}/>
+                    </div>
+                    {isUpdateMode && <Separator/>}
                 </CardHeader>
-                <CardContent>
+                {isUpdateMode && <CardContent>
                     <UserTag name={props.model.owner}/>
                     <Progress value={props.model.progressPercentage}></Progress>
-                </CardContent>
+                </CardContent>}
             </Card>
         </form>
     )
@@ -131,33 +143,31 @@ export const ProjectCardForm = (props: ProjectCardFormProps) =>{
 
 type ProjectMenuProps = {
     disabled: boolean;
-    OnUpdate: () => void;
     OnArchive: () => void;
     OnDelete: () => void;
 }
 
 const ProjectMenu = (props: ProjectMenuProps) => {
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" disabled={props.disabled}>
-                    <Menu />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={props.OnUpdate}>
-                        Modificar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={props.OnArchive}>
-                        Archivar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive" onClick={props.OnDelete}>
-                        Borrar
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <div onClick={e=>e.stopPropagation()}>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon" disabled={props.disabled}>
+                        <Menu />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem onClick={props.OnArchive}>
+                            Archivar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive" onClick={props.OnDelete}>
+                            Borrar
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     );
 }
 
