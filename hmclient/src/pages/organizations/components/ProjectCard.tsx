@@ -1,45 +1,31 @@
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
-    Progress
-} from "@/components/ui/progress"
-import {
-    DropdownMenu, DropdownMenuContent,
-    DropdownMenuTrigger,
-    DropdownMenuGroup,
-    DropdownMenuItem
-} from "@/components/ui/dropdown-menu.tsx";
-import { Badge } from "@/components/ui/badge";
-import { Menu, User } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import {useEffect, useState, useRef} from "react";
-import {Textarea} from "@/components/ui/textarea.tsx";
-import { Input } from "@/components/ui/input"
+import {useEffect, useRef, useState} from "react";
+import {ProjectModel} from "@/pages/organizations/OrganizationViewModel.ts";
+import {ProjectCardForm, ProjectCardRead} from "@/pages/organizations/components/ProjectCardMarkup.tsx";
+import ConfirmDeleteDialog from "@/components/custom/dialogs/ConfirmDeleteDialog.tsx";
 
 export type ProjectCardProps = {
-    projectId: string;
-    name: string;
-    description: string;
+    model: ProjectModel;
+    forbiddenNames: string[];
     owner: string;
     progress: number;
     onOpen: (projectId: string) => Promise<void>;
-    onUpdate: (projectId: string, name: string) => Promise<void>;
+    onUpdate: (model: ProjectModel) => Promise<void>;
+    onDelete: (projectId: string) => Promise<void>;
 }
 
 const ProjectCard = (props: ProjectCardProps) => {
-    const [editMode, setEditMode] = useState(false);
+    const [currentState, setCurrentState] = useState<'read'|'edit'|'delete'>('read');
+   // const [isEditMode, setIsEditMode] = useState(false);
+
     const ref = useRef<HTMLDivElement>(null);
+
+    const isEditMode = currentState === 'edit';
+    const deleteDialogOpened = currentState === 'delete';
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
-                setEditMode(false);
+                setCurrentState('read');
             }
         }
         document.addEventListener('mousedown', handleClickOutside);
@@ -48,93 +34,49 @@ const ProjectCard = (props: ProjectCardProps) => {
         }
     }, [ref]);
 
-    const progressValue = (() =>{
-        if (props.progress < 5)
-        {
-            return 5;
-        }
-        if (props.progress >=99)
-        {
-            return 100;
-        }
-        return props.progress;
-    })();
-
-    const enterEditMode = () => {
-        setEditMode(true);
+    const handleConfirmDelete = async () => {
+        await props.onDelete(props.model.id);
+        setCurrentState('read');
     }
 
-    if (!editMode)
+    const handleMenuDeleteClick = async () =>{
+        setCurrentState('delete');
+    }
+
+    const deleteDialogTitle = 'Confirmar borrar';
+
+    const confirmDeleteDescription = '¿Estás seguro de que quieres borrar este proyecto? Esta acción no se puede deshacer.' +
+        'para confirmar, escribe el nombre del proyecto: ' + props.model.name;
+
+    if (!isEditMode)
     {
         return (
-            <Card className='w-[350px]'>
-                <CardHeader>
-                    <CardTitle className='flex justify-between items-center-safe'>
-                        {props.name}
-                        <ProjectMenu OnUpdate={() => {}} OnArchive={() => {}} OnDelete={() => {}}/></CardTitle>
-                    <CardDescription onClick={enterEditMode}>{props.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <UserTag name={props.owner}/>
-                    <Progress value={progressValue}></Progress>
-                </CardContent>
-            </Card>
+            <>
+                <ProjectCardRead model={props.model} onOpen={async () => {}} onEnterEditMode={()=>
+                    setCurrentState('edit')} onDelete={handleMenuDeleteClick}/>
+                <ConfirmDeleteDialog onConfirm={handleConfirmDelete}
+                                     open={deleteDialogOpened}
+                                     confirmKeyword={props.model.name}
+                                     onCancel={()=>setCurrentState('read')}
+                                     title={deleteDialogTitle} description={confirmDeleteDescription}/>
+            </>
         )
     }
     return (
-        <Card ref={ref} className='w-[350px]'>
-            <CardHeader>
-                <CardTitle className='flex justify-between items-center-safe'>
-                    <Input value={props.name}/><ProjectMenu disabled OnUpdate={() => {}} OnArchive={() => {}} OnDelete={() => {}}/></CardTitle>
-                <Textarea placeholder='descripcion...'>{props.description}</Textarea>
-            </CardHeader>
-            <CardContent>
-                <UserTag name={props.owner}/>
-                <Progress value={progressValue}></Progress>
-            </CardContent>
-        </Card>
+        <>
+            <ProjectCardForm model={props.model}
+                             forbiddenNames={props.forbiddenNames}
+                             onUpdate={async (m)=>{
+                                 await props.onUpdate(m);
+                             }} exitEditMode={()=>setCurrentState('read')}
+                             onDelete={handleConfirmDelete}/>
+            <ConfirmDeleteDialog onConfirm={handleConfirmDelete}
+                                 open={deleteDialogOpened}
+                                 onCancel={()=>setCurrentState('read')}
+                                 confirmKeyword={props.model.name}
+                                 title={deleteDialogTitle} description={confirmDeleteDescription}/>
+        </>
     )
-}
-
-const UserTag = (props: {name: string}) => {
-    return (
-        <Badge className='flex gap-2' variant='secondary'>
-            <User/>
-            {props.name}
-        </Badge>
-    );
-}
-
-type ProjectMenuProps = {
-    disabled: boolean;
-    OnUpdate: () => void;
-    OnArchive: () => void;
-    OnDelete: () => void;
-}
-
-const ProjectMenu = (props: ProjectMenuProps) => {
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" disabled={props.disabled}>
-                    <Menu />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={props.OnUpdate}>
-                        Modificar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={props.OnArchive}>
-                        Archivar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive" onClick={props.OnDelete}>
-                        Borrar
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    );
 }
 
 export default ProjectCard;

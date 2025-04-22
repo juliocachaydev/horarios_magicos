@@ -5,6 +5,7 @@ export type HmButtonProps = {
     disabled?: boolean;
     onClick?: () => void;
     onClickAsync?: () => Promise<void>;
+    type?: 'submit' | 'reset' | 'button'
 }
 
 export type HmButtonSolidProps = HmButtonProps & {
@@ -23,7 +24,8 @@ export const HmButtonSolid = (props: HmButtonSolidProps) =>{
         <HmButtonWrapper disabled={props.disabled ?? false}
                          onClick={props.onClick}
                          onClickAsync={props.onClickAsync}>
-            <Button variant={variant} disabled={props.disabled ?? false}>
+            <Button variant={variant} disabled={props.disabled ?? false}
+            type={props.type ?? 'button'}>
                 {props.icon}
                 {props.text}</Button>
         </HmButtonWrapper>
