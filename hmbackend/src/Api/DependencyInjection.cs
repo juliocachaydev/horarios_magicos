@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Packages.Repository;
 
 namespace Api;
@@ -10,7 +11,9 @@ public static class DependencyInjection
         services.AddMediatR(c =>
             c.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-        services.AddScoped<AppDbContext>();
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                sqlOptions => sqlOptions.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName)));
         
         services.AddRepository(sp => new DbAdapter(sp.GetRequiredService<AppDbContext>()), Assembly.GetExecutingAssembly());
     }

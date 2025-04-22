@@ -1,8 +1,9 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Common;
+using Domain.ValueObjects;
 
 namespace Domain.Organizations;
 
-public class Project
+public class Project : AggregateBase
 {
     private readonly ProjectState _state;
 
