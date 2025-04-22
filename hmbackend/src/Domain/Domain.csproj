@@ -6,4 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Packages\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Packages\Packages.csproj" />
+    </ItemGroup>
+
 </Project>

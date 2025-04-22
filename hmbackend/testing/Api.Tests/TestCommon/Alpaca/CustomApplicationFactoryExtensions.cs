@@ -2,7 +2,6 @@
 using Api;
 using Application;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi;
 
 // ReSharper disable once CheckNamespace
 namespace Alpaca;

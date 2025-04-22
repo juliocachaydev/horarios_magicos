@@ -6,7 +6,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi;
 
 // ReSharper disable once CheckNamespace
 namespace Alpaca;

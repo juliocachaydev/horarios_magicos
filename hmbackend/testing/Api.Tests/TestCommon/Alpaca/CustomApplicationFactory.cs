@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using WebApi;
 
 // ReSharper disable once CheckNamespace
 namespace Alpaca;
